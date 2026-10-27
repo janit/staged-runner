@@ -1,0 +1,31 @@
+# The fleet: every host in spill-over order, fastest first. The same file goes
+# on every host (default path /etc/staged-runner.toml).
+#
+# Runners fill in this order (`staged-runner plan` prints it):
+#   runner-fast-1, runner-slow-1, runner-mac-1, runner-slow-2
+
+# Optional, for every host:
+# listen = "0.0.0.0:7391"   # where each host serves its runners' states
+# poll = 10                 # seconds between checks
+
+[[host]]
+name = "fast"                       # its runners are runner-fast-1, runner-fast-2, ...
+endpoint = "http://10.0.0.11:7391"  # where the other hosts reach it
+listen = "10.0.0.11:7391"           # optional: this host only, overrides the top-level listen
+runners = 1
+kind = "docker"                     # containers named runner-fast-1, ...
+
+[[host]]
+name = "slow"
+endpoint = "http://10.0.0.12:7391"
+listen = "10.0.0.12:7391"
+runners = 2
+kind = "docker"
+
+[[host]]
+name = "mac"
+endpoint = "http://10.0.0.13:7391"
+listen = "10.0.0.13:7391"
+runners = 1
+kind = "native"                     # actions-runner folders <root>/runner-mac-1, ...
+root = "/Users/ci/runners"
