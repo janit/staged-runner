@@ -2,7 +2,7 @@
 # on every host (default path /etc/staged-runner.toml).
 #
 # Runners fill in this order (`staged-runner plan` prints it):
-#   runner-fast-1, runner-slow-1, runner-mac-1, runner-slow-2
+#   runner-fast-1, runner-slow-1, runner-slow-2, runner-mac-1
 
 # Optional, for every host:
 # listen = "0.0.0.0:7391"   # where each host serves its runners' states

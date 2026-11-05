@@ -29,12 +29,12 @@ leave that runner out of the fleet.
 
 ## How it works
 
-The fleet file lists your hosts, fastest first. Runners are ordered by number,
-then by host:
+The fleet file lists your hosts, fastest first. Runners are ordered host by
+host:
 
-    runner-A-1, runner-B-1, runner-C-1, runner-A-2, runner-B-2, ...
+    runner-A-1, runner-A-2, runner-B-1, runner-C-1, runner-C-2, ...
 
-so each host's first runner comes before any host's second runner.
+so a host's runners are all busy before the next host's first runner starts.
 
 `staged-runner run <host>` runs on every host. Every 10 seconds it asks the
 hosts before it for their runners' states, then for each of its own runners:

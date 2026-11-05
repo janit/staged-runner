@@ -1,6 +1,7 @@
 //! Spill-over order and the rule for when a runner runs.
 //!
-//! Runners are ordered by number, then by host: A-1, B-1, C-1, A-2, B-2, ...
+//! Runners are ordered host by host: A-1, A-2, B-1, C-1, C-2, ... so a host's
+//! runners all take jobs before the next host's first runner starts.
 //! A runner runs when every runner before it is busy or down. The first one
 //! always runs, so the fleet spills over one runner at a time.
 
@@ -30,14 +31,9 @@ pub enum Action {
 }
 
 pub fn order(hosts: &[Host]) -> Vec<String> {
-    let most = hosts.iter().map(|h| h.runners).max().unwrap_or(0);
-    (1..=most)
-        .flat_map(|n| {
-            hosts
-                .iter()
-                .filter(move |h| n <= h.runners)
-                .map(move |h| runner_name(&h.name, n))
-        })
+    hosts
+        .iter()
+        .flat_map(|h| (1..=h.runners).map(move |n| runner_name(&h.name, n)))
         .collect()
 }
 
@@ -80,15 +76,15 @@ mod tests {
     }
 
     #[test]
-    fn orders_by_number_then_host() {
+    fn orders_host_by_host() {
         let o = order(&[host("A", 2), host("B", 1), host("C", 3)]);
         assert_eq!(
             o,
             [
                 "runner-A-1",
+                "runner-A-2",
                 "runner-B-1",
                 "runner-C-1",
-                "runner-A-2",
                 "runner-C-2",
                 "runner-C-3"
             ]
