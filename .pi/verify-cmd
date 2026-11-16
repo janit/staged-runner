@@ -1,0 +1,2 @@
+# The fast gate: the same checks CI runs (.github/workflows/ci.yml).
+cargo fmt --check && cargo clippy --locked --all-targets -- -D warnings && cargo test --locked
